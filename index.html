@@ -19,7 +19,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="css/style.css?v=12">
+<link rel="stylesheet" href="css/style.css?v=13">
 </head>
 <body>
 
@@ -167,7 +167,7 @@
         <span class="stage-num">Stage 2</span>
         <div class="stage-icon">↗</div>
         <h3>Click-preference RL</h3>
-        <p>Learn actual user preference from position-aware click pairs while protecting format, proximity, length, and diversity.</p>
+        <p>Learn actual user preference from click pairs while protecting format, proximity, length, and diversity.</p>
         <small>173,071 preference pairs</small>
       </article>
       <article class="stage-item stage-ground">
@@ -211,25 +211,30 @@
 <section id="click-alignment">
   <div class="wrap-wide">
     <p class="eyebrow">Stage 2 · Behavioral supervision</p>
-    <h2 class="sec">Learning from clicks without learning position bias</h2>
-    <p class="stage2-lead">A click indicates appeal, but it also depends on what the user likely saw. We pair a clicked suggestion only with unclicked suggestions displayed above it.</p>
+    <h2 class="sec">Learning user preference from clicks</h2>
+    <p class="stage2-lead">Click signals reveal which follow-up users want to continue with. We turn this behavioral feedback into pairwise preferences and learn a reward model before policy optimization.</p>
 
     <div class="stage2-columns">
       <article class="stage2-panel click-preference-panel">
         <span class="stage2-label">Click preference</span>
-        <h3>Position-aware preference pairs</h3>
-        <p>A clicked suggestion is preferred only to unclicked suggestions displayed above it, avoiding false negatives caused by unseen positions.</p>
+        <h3>Pairwise click preference</h3>
+        <p>For the same recommendation context, a selected follow-up is contrasted with an unselected alternative.</p>
 
-        <div class="slate-panel">
-          <span class="slate-title">Displayed suggestion slate</span>
-          <div class="suggestion-row paired"><span>1</span><p>Enhance the jacket texture</p><em>paired as y<sup>−</sup></em></div>
-          <div class="suggestion-row paired"><span>2</span><p>Blur the background slightly</p><em>paired as y<sup>−</sup></em></div>
-          <div class="suggestion-row clicked"><span>3</span><p>Replace the sky with a sunset</p><em>clicked y<sup>+</sup></em></div>
+        <div class="preference-pair" aria-label="Example click-preference pair">
+          <div class="preference-choice clicked">
+            <span>Clicked · y<sup>+</sup></span>
+            <p>Replace the sky with a sunset</p>
+          </div>
+          <div class="preference-divider">preferred over</div>
+          <div class="preference-choice unclicked">
+            <span>Unclicked · y<sup>−</sup></span>
+            <p>Enhance the jacket texture</p>
+          </div>
         </div>
 
         <div class="pair-summary">
-          <h4>Clicked beats visible-above</h4>
-          <p>This rule improves held-out click accuracy from 0.619 to 0.690 at a matched data budget.</p>
+          <h4>Behavior becomes supervision</h4>
+          <p>The reward model learns which suggestion better matches user interest from real recommendation choices.</p>
           <dl>
             <div><dt>173,071</dt><dd>preference pairs</dd></div>
             <div><dt>8B</dt><dd>vision-language reward model</dd></div>
