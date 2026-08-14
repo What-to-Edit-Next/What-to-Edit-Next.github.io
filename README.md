@@ -5,18 +5,19 @@ Static GitHub Pages website for:
 > **What to Edit Next: Visually Aligned Image-Editing Follow-Up Suggestions in
 > Conversational Systems**
 
-The page is based on the supplied `rethinking-cfg-opd.github.io` project-page
-template and has been adapted to this paper's visual identity, method, figures,
-and experimental results.
+**Project lead:** Jinpeng Yu
+
+This repository contains the official project page, the public paper, research
+figures, experimental results, and interactive presentation components. It is
+a static HTML/CSS/JavaScript site with no build step or package dependencies.
 
 ## Structure
 
 ```text
 index.html                       # Project page content
-css/style.css                    # Template styles + paper-specific components
+css/style.css                    # Site layout and paper-specific components
 js/main.js                       # Tabs, lightbox, BibTeX, progress, navigation
-assets/paper.pdf                 # Single-column technical report
-assets/paper-two-column.pdf      # Two-column paper
+assets/paper.pdf                 # Public arXiv technical report
 assets/figures/teaser.png        # Product motivation figure
 assets/figures/framework.png     # Three-stage framework
 assets/figures/data-pipeline.png # SFT data construction
@@ -44,8 +45,8 @@ https://<username>.github.io/<repository>/
 
 All paper assets use relative paths and work under a repository subpath.
 
-## Before the public launch
+## Public paper
 
-When the public arXiv and code URLs are available, add their buttons to the
-resource navigation in `index.html` and update the BibTeX entry with the final
-venue or arXiv identifier.
+The public paper and citation metadata are available at
+[arXiv:2608.07565](https://arxiv.org/abs/2608.07565). The PDF provided on the
+project page is the public arXiv technical report.

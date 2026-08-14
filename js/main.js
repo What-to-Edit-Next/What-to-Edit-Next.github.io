@@ -1,6 +1,5 @@
-/* Project-page interactions inherited from the reference template:
-   tabs, figure lightbox, BibTeX copy, reading progress, reveal motion,
-   and floating section navigation. */
+/* Project-page interactions: tabs, figure lightbox, BibTeX copy,
+   reading progress, reveal motion, and floating section navigation. */
 
 function initTabs() {
   document.querySelectorAll("[data-tabs]").forEach((group) => {
