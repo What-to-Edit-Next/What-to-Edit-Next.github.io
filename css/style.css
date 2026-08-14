@@ -1107,9 +1107,8 @@ h1.title { max-width: 1040px; }
 .online-note { margin: 18px 0 0; color: var(--ink-faint); font-size: 12.5px; text-align: center; }
 .verifier-study {
   max-width: 1000px;
-  margin: 54px auto 0;
-  padding-top: 48px;
-  border-top: 1px solid var(--line);
+  margin: 0 auto;
+  padding-top: 4px;
 }
 .verifier-study > h3 {
   margin: 0;

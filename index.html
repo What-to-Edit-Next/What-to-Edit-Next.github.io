@@ -19,7 +19,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="css/style.css?v=11">
+<link rel="stylesheet" href="css/style.css?v=12">
 </head>
 <body>
 
@@ -299,6 +299,7 @@
       <div class="tabs">
         <button class="tab active" type="button" data-target="offline-results">Offline evaluation</button>
         <button class="tab" type="button" data-target="online-results">Online A/B test</button>
+        <button class="tab" type="button" data-target="verifier-results">Verifier study</button>
       </div>
 
       <div class="tabpane active" id="offline-results">
@@ -331,28 +332,27 @@
         </div>
         <p class="online-note">14 days · millions of users · 5% traffic per arm · all reported lifts p&lt;0.05</p>
       </div>
-    </div>
 
-    <div class="verifier-study" id="verifier-results">
-      <p class="eyebrow">Verifier study</p>
-      <h3>Structure makes verification safe enough for RL</h3>
-      <p class="verifier-study-sub">A one-pass VLM confuses sources with targets and rejects valid creative edits. The ordered image-first procedure improves recall while sharply reducing false rejection.</p>
-      <div class="qtable-scroll">
-        <table class="qtable result-table">
-          <thead>
-            <tr><th class="method">Verifier</th><th>Missing-source recall ↑</th><th>Already-satisfied recall ↑</th><th>Union recall ↑</th><th>False rejection ↓</th></tr>
-          </thead>
-          <tbody>
-            <tr><td class="method">Single-pass VLM</td><td>61.6%</td><td>43.4%</td><td>47.5%</td><td>22.2%</td></tr>
-            <tr class="ours"><td class="method">Source–target verifier <span class="ours-pill">OURS</span></td><td class="best">92.9%</td><td class="best">74.5%</td><td class="best">78.7%</td><td class="best">0.6%</td></tr>
-          </tbody>
-        </table>
+      <div class="tabpane verifier-study" id="verifier-results">
+        <h3>Structure makes verification safe enough for RL</h3>
+        <p class="verifier-study-sub">A one-pass VLM confuses sources with targets and rejects valid creative edits. The ordered image-first procedure improves recall while sharply reducing false rejection.</p>
+        <div class="qtable-scroll">
+          <table class="qtable result-table">
+            <thead>
+              <tr><th class="method">Verifier</th><th>Missing-source recall ↑</th><th>Already-satisfied recall ↑</th><th>Union recall ↑</th><th>False rejection ↓</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="method">Single-pass VLM</td><td>61.6%</td><td>43.4%</td><td>47.5%</td><td>22.2%</td></tr>
+              <tr class="ours"><td class="method">Source–target verifier <span class="ours-pill">OURS</span></td><td class="best">92.9%</td><td class="best">74.5%</td><td class="best">78.7%</td><td class="best">0.6%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <aside class="paperbox finding verifier-finding">
+          <span class="pb-label">Why false rejection matters</span>
+          <h3 class="pb-title">A verifier must preserve the creative action space</h3>
+          <p>A 22.2% false-rejection rate would punish valid edits and push the policy toward safe, generic outputs. Source–target structure lowers this rate to 0.6% while increasing visual-inconsistency recall to 78.7%.</p>
+        </aside>
       </div>
-      <aside class="paperbox finding verifier-finding">
-        <span class="pb-label">Why false rejection matters</span>
-        <h3 class="pb-title">A verifier must preserve the creative action space</h3>
-        <p>A 22.2% false-rejection rate would punish valid edits and push the policy toward safe, generic outputs. Source–target structure lowers this rate to 0.6% while increasing visual-inconsistency recall to 78.7%.</p>
-      </aside>
     </div>
   </div>
 </section>
