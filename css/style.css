@@ -654,14 +654,6 @@ h1.title { max-width: 1040px; }
 .teaser-explainer {
   padding: 4px 0 0;
 }
-.teaser-kicker {
-  margin: 0 0 5px;
-  color: var(--accent-dark);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-}
 .teaser-explainer > h2 {
   margin: 0 0 18px;
   font-family: var(--serif);
