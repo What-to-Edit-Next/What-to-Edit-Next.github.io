@@ -19,7 +19,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="css/style.css?v=9">
+<link rel="stylesheet" href="css/style.css?v=10">
 </head>
 <body>
 
@@ -64,14 +64,36 @@
 
 <!-- ======================= TEASER ======================= -->
 <section id="overview">
-  <div class="wrap">
-    <figure class="fig teaser-paper">
-      <img src="assets/figures/teaser.png" alt="A multi-turn Qwen image-editing conversation comparing click-aligned and visually grounded follow-up suggestions.">
-      <figcaption>
-        A click-supervised policy can still propose a <b>missing-source</b> edit or an <b>already-satisfied</b> target.
-        Our complete framework produces follow-ups that are appealing, executable, and consistent with the latest image.
-      </figcaption>
-    </figure>
+  <div class="wrap-wide">
+    <div class="teaser-layout">
+      <figure class="fig teaser-paper">
+        <img src="assets/figures/teaser.png" alt="A multi-turn Qwen image-editing conversation comparing click-aligned and visually grounded follow-up suggestions.">
+        <figcaption>
+          Click alignment captures user preference; visual grounding keeps the next edit executable on the latest image.
+        </figcaption>
+      </figure>
+
+      <aside class="teaser-explainer" aria-label="Examples of invalid and valid follow-up suggestions">
+        <p class="teaser-kicker">Reading the teaser</p>
+        <h2>What makes a next edit valid?</h2>
+        <article class="teaser-note bad">
+          <span>Missing source</span>
+          <h3>“Change the red hat to blue”</h3>
+          <p>The instruction presupposes a red hat, but no hat is visible. It sounds concrete while being impossible to execute faithfully.</p>
+        </article>
+        <article class="teaser-note amber">
+          <span>Already-satisfied target</span>
+          <h3>“Add a cinematic color tone”</h3>
+          <p>The image already has the requested cinematic treatment. The suggestion is executable in form but redundant in effect.</p>
+        </article>
+        <article class="teaser-note good">
+          <span>Visually aligned</span>
+          <h3>“Add warm golden-hour lighting”</h3>
+          <p>The edit introduces a meaningful new target, requires no missing source, and remains consistent with the current image.</p>
+          <div class="validity-tags"><b>Image-consistent</b><b>Executable</b><b>Non-redundant</b></div>
+        </article>
+      </aside>
+    </div>
 
     <div class="headline-stats" aria-label="Headline results">
       <div class="headline-stat"><strong>80.1%</strong><span>of follow-up queries are image-dependent</span></div>
@@ -100,29 +122,6 @@
   </div>
 </section>
 
-<!-- ======================= CONTRIBUTIONS ======================= -->
-<section id="contributions">
-  <div class="wrap">
-    <p class="eyebrow">Contributions</p>
-    <h2 class="sec">Clicks and pixels are complementary signals</h2>
-    <p class="sec-sub">The work formulates multimodal follow-up edit recommendation and connects task supervision, behavioral preference, and explicit visual grounding in one deployed system.</p>
-    <div class="contribs">
-      <div class="contrib"><span class="num">1</span>
-        <h4>A visual recommendation problem</h4>
-        <p>We formalize follow-up editing as slate generation conditioned on the latest image, rewritten query, and editing intent—and show that four out of five observed follow-ups require the image.</p>
-      </div>
-      <div class="contrib"><span class="num">2</span>
-        <h4>Behaviorally aligned generation</h4>
-        <p>Human-reviewed intent transitions create the initial action space. Position-aware click pairs and multi-objective GRPO then align it with what users actually choose.</p>
-      </div>
-      <div class="contrib"><span class="num">3</span>
-        <h4>Image-first edit verification</h4>
-        <p>A structured source–target verifier detects absent sources and already-satisfied targets, providing a grounding reward during training without adding serving latency.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ======================= PROBLEM ======================= -->
 <section class="section-alt" id="problem">
   <div class="wrap">
@@ -130,18 +129,6 @@
     <h2 class="sec">A good suggestion must be desirable and executable</h2>
     <div class="prose">
       <p class="lead">Text-only relevance is not enough after an image has changed. Each recommended edit must be grounded in the latest visual state.</p>
-    </div>
-    <div class="cards failure-cards">
-      <div class="card bad">
-        <span class="failure-label">Missing source</span>
-        <h4>“Change the red hat to blue”</h4>
-        <p>The instruction presupposes a red hat, but no hat is visible. The edit sounds concrete while being impossible to execute faithfully.</p>
-      </div>
-      <div class="card bad amber">
-        <span class="failure-label">Already-satisfied target</span>
-        <h4>“Add a cinematic color tone”</h4>
-        <p>The image already has the requested cinematic treatment. The suggestion is executable in form but redundant in effect.</p>
-      </div>
     </div>
     <aside class="paperbox finding">
       <span class="pb-label">
@@ -161,15 +148,21 @@
     <h2 class="sec">A three-stage alignment framework</h2>
     <p class="sec-sub">Each stage introduces a new source of supervision and addresses a failure left by the previous stage.</p>
 
+    <figure class="fig framework-figure">
+      <img src="assets/figures/framework.png" alt="Three-stage training framework with SFT, click-preference reinforcement learning, and visual-consistency alignment.">
+      <figcaption>
+        <b>Framework overview.</b> Stage 1 constructs validated SFT slates from real contexts. Stage 2 trains a click reward model and optimizes five non-grounding rewards with GRPO. Stage 3 adds an image-first grounding reward to a separate GRPO run.
+      </figcaption>
+    </figure>
+
     <div class="stage-overview">
       <article class="stage-item stage-sft">
         <span class="stage-num">Stage 1</span>
-        <div class="stage-icon">61</div>
+        <div class="stage-icon">SFT</div>
         <h3>Supervised fine-tuning</h3>
         <p>Learn task-appropriate follow-up directions from human-reviewed intents and validated teacher-generated slates.</p>
         <small>39.5K training slates</small>
       </article>
-      <span class="stage-arrow" aria-hidden="true">→</span>
       <article class="stage-item stage-click">
         <span class="stage-num">Stage 2</span>
         <div class="stage-icon">↗</div>
@@ -177,7 +170,6 @@
         <p>Learn actual user preference from position-aware click pairs while protecting format, proximity, length, and diversity.</p>
         <small>173,071 preference pairs</small>
       </article>
-      <span class="stage-arrow" aria-hidden="true">→</span>
       <article class="stage-item stage-ground">
         <span class="stage-num">Stage 3</span>
         <div class="stage-icon">◎</div>
@@ -186,13 +178,6 @@
         <small>training-time supervision only</small>
       </article>
     </div>
-
-    <figure class="fig framework-figure">
-      <img src="assets/figures/framework.png" alt="Three-stage training framework with SFT, click-preference reinforcement learning, and visual-consistency alignment.">
-      <figcaption>
-        <b>Framework overview.</b> Stage 1 constructs validated SFT slates from real contexts. Stage 2 trains a click reward model and optimizes five non-grounding rewards with GRPO. Stage 3 adds an image-first grounding reward to a separate GRPO run.
-      </figcaption>
-    </figure>
   </div>
 </section>
 
@@ -200,7 +185,7 @@
 <section class="section-alt" id="sft-data">
   <div class="wrap-wide">
     <p class="eyebrow">Stage 1 · Task supervision</p>
-    <h2 class="sec">Constructing follow-up slates from real contexts</h2>
+    <h2 class="sec">Data pipeline: Constructing follow-up slates from real contexts</h2>
     <p class="sec-sub">Online inputs provide the context, people define appropriate next directions, and a teacher turns those directions into candidate text.</p>
 
     <div class="pipeline-summary">
@@ -231,34 +216,44 @@
       <p class="lead">A click indicates appeal, but it also depends on what the user likely saw. We pair a clicked suggestion only with unclicked suggestions displayed above it.</p>
     </div>
 
-    <div class="click-pair-demo">
-      <div class="slate-panel">
-        <span class="slate-title">Displayed suggestion slate</span>
-        <div class="suggestion-row paired"><span>1</span><p>Enhance the jacket texture</p><em>paired as y<sup>−</sup></em></div>
-        <div class="suggestion-row paired"><span>2</span><p>Blur the background slightly</p><em>paired as y<sup>−</sup></em></div>
-        <div class="suggestion-row clicked"><span>3</span><p>Replace the sky with a sunset</p><em>clicked y<sup>+</sup></em></div>
-      </div>
-      <div class="pair-explainer">
-        <span class="pair-chip">Position-aware pairing</span>
-        <h3>Clicked beats visible-above</h3>
-        <p>Suggestions below the click are excluded because they may not have been viewed. This simple rule improves held-out click accuracy from 0.619 to 0.690 at a matched data budget.</p>
-        <dl>
-          <div><dt>173,071</dt><dd>preference pairs</dd></div>
-          <div><dt>8B</dt><dd>vision-language reward model</dd></div>
-        </dl>
-      </div>
+    <div class="stage2-columns">
+      <article class="stage2-panel click-preference-panel">
+        <span class="stage2-label">Click preference</span>
+        <h3>Position-aware preference pairs</h3>
+        <p>A clicked suggestion is preferred only to unclicked suggestions displayed above it, avoiding false negatives caused by unseen positions.</p>
+
+        <div class="slate-panel">
+          <span class="slate-title">Displayed suggestion slate</span>
+          <div class="suggestion-row paired"><span>1</span><p>Enhance the jacket texture</p><em>paired as y<sup>−</sup></em></div>
+          <div class="suggestion-row paired"><span>2</span><p>Blur the background slightly</p><em>paired as y<sup>−</sup></em></div>
+          <div class="suggestion-row clicked"><span>3</span><p>Replace the sky with a sunset</p><em>clicked y<sup>+</sup></em></div>
+        </div>
+
+        <div class="pair-summary">
+          <h4>Clicked beats visible-above</h4>
+          <p>This rule improves held-out click accuracy from 0.619 to 0.690 at a matched data budget.</p>
+          <dl>
+            <div><dt>173,071</dt><dd>preference pairs</dd></div>
+            <div><dt>8B</dt><dd>vision-language reward model</dd></div>
+          </dl>
+        </div>
+      </article>
+
+      <article class="stage2-panel grpo-panel">
+        <span class="stage2-label">GRPO optimization</span>
+        <h3>Six complementary rewards</h3>
+        <p>Stage 2 jointly optimizes five non-grounding signals. Stage 3 retains them and adds visual consistency as the sixth reward.</p>
+        <div class="reward-row">
+          <span><b>Preference</b><small>user appeal</small></span>
+          <span><b>Output gate</b><small>valid slate</small></span>
+          <span><b>PPL</b><small>SFT proximity</small></span>
+          <span><b>Length</b><small>display fit</small></span>
+          <span><b>Diversity</b><small>distinct ideas</small></span>
+          <span class="reward-grounding"><b>Visual consistency</b><small>grounding · Stage 3</small></span>
+        </div>
+      </article>
     </div>
 
-    <h3 class="subsec"><span class="idx">6×</span> Rewards in the full framework</h3>
-    <p class="subsec-note">Stage 2 jointly optimizes five non-grounding signals. Stage 3 retains those objectives and adds visual consistency as the sixth reward.</p>
-    <div class="reward-row">
-      <span><b>Preference</b><small>user appeal</small></span>
-      <span><b>Output gate</b><small>valid slate</small></span>
-      <span><b>PPL</b><small>SFT proximity</small></span>
-      <span><b>Length</b><small>display fit</small></span>
-      <span><b>Diversity</b><small>distinct ideas</small></span>
-      <span class="reward-grounding"><b>Visual consistency</b><small>grounding · Stage 3</small></span>
-    </div>
     <div class="callout bad">
       <h4>Clicks do not guarantee executability</h4>
       <p>Stage 2 raises expert-rated quality and online CTR, yet visual inconsistency increases from 3.0% after SFT to 3.7%. Click feedback captures what looks appealing—not whether the edit is supported by the current image.</p>
@@ -336,49 +331,27 @@
         <p class="online-note">14 days · millions of users · 5% traffic per arm · all reported lifts p&lt;0.05</p>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- ======================= VERIFIER EVAL ======================= -->
-<section class="section-alt" id="verifier-results">
-  <div class="wrap">
-    <p class="eyebrow">Verifier study</p>
-    <h2 class="sec">Structure makes verification safe enough for RL</h2>
-    <p class="sec-sub">A one-pass VLM confuses sources with targets and rejects valid creative edits. The ordered image-first procedure improves recall while sharply reducing false rejection.</p>
-    <div class="qtable-scroll">
-      <table class="qtable result-table">
-        <thead>
-          <tr><th class="method">Verifier</th><th>Missing-source recall ↑</th><th>Already-satisfied recall ↑</th><th>Union recall ↑</th><th>False rejection ↓</th></tr>
-        </thead>
-        <tbody>
-          <tr><td class="method">Single-pass VLM</td><td>61.6%</td><td>43.4%</td><td>47.5%</td><td>22.2%</td></tr>
-          <tr class="ours"><td class="method">Source–target verifier <span class="ours-pill">OURS</span></td><td class="best">92.9%</td><td class="best">74.5%</td><td class="best">78.7%</td><td class="best">0.6%</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <aside class="paperbox finding verifier-finding">
-      <span class="pb-label">Why false rejection matters</span>
-      <h3 class="pb-title">A verifier must preserve the creative action space</h3>
-      <p>A 22.2% false-rejection rate would punish valid edits and push the policy toward safe, generic outputs. Source–target structure lowers this rate to 0.6% while increasing visual-inconsistency recall to 78.7%.</p>
-    </aside>
-  </div>
-</section>
-
-<!-- ======================= DEPLOYMENT ======================= -->
-<section id="deployment">
-  <div class="wrap">
-    <p class="eyebrow">Deployment</p>
-    <h2 class="sec">A training-time verifier, a single serving-time policy</h2>
-    <div class="prose">
-      <p class="lead">The visual verifier contributes supervision during Stage 3 and checkpoint selection, but it is not part of the online serving path.</p>
-      <p>The deployed system remains one Qwen3-VL-8B policy followed by the existing display layer, which randomly selects three distinct suggestions from the generated slate. This preserves the product latency profile while carrying the visual-consistency improvement into production.</p>
-    </div>
-    <div class="deployment-flow" aria-label="Deployment flow">
-      <div><b>Image + query + intent</b><span>latest conversation state</span></div>
-      <i>→</i>
-      <div class="deploy-model"><b>8B multimodal policy</b><span>SFT + click RL + grounding RL</span></div>
-      <i>→</i>
-      <div><b>Three displayed edits</b><span>no additional verifier call</span></div>
+    <div class="verifier-study" id="verifier-results">
+      <p class="eyebrow">Verifier study</p>
+      <h3>Structure makes verification safe enough for RL</h3>
+      <p class="verifier-study-sub">A one-pass VLM confuses sources with targets and rejects valid creative edits. The ordered image-first procedure improves recall while sharply reducing false rejection.</p>
+      <div class="qtable-scroll">
+        <table class="qtable result-table">
+          <thead>
+            <tr><th class="method">Verifier</th><th>Missing-source recall ↑</th><th>Already-satisfied recall ↑</th><th>Union recall ↑</th><th>False rejection ↓</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="method">Single-pass VLM</td><td>61.6%</td><td>43.4%</td><td>47.5%</td><td>22.2%</td></tr>
+            <tr class="ours"><td class="method">Source–target verifier <span class="ours-pill">OURS</span></td><td class="best">92.9%</td><td class="best">74.5%</td><td class="best">78.7%</td><td class="best">0.6%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <aside class="paperbox finding verifier-finding">
+        <span class="pb-label">Why false rejection matters</span>
+        <h3 class="pb-title">A verifier must preserve the creative action space</h3>
+        <p>A 22.2% false-rejection rate would punish valid edits and push the policy toward safe, generic outputs. Source–target structure lowers this rate to 0.6% while increasing visual-inconsistency recall to 78.7%.</p>
+      </aside>
     </div>
   </div>
 </section>
