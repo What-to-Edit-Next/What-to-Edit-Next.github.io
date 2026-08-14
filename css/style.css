@@ -106,15 +106,6 @@ h1.title .hl { color: var(--accent-dark); }
 .btn.ghost:hover { border-color: var(--accent); color: var(--accent-dark); }
 .btn.disabled { opacity: .5; pointer-events: none; }
 .btn .hf { font-size: 17px; line-height: 1; }
-.btn .soon-label {
-  padding-left: 8px;
-  border-left: 1px solid var(--line);
-  color: var(--ink-faint);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: .02em;
-}
-
 /* ---------- Sections ---------- */
 section { padding: 52px 0; border-bottom: 1px solid var(--line); }
 section:last-of-type { border-bottom: none; }
