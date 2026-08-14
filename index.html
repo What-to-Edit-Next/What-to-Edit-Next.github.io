@@ -19,7 +19,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="css/style.css?v=10">
+<link rel="stylesheet" href="css/style.css?v=11">
 </head>
 <body>
 
@@ -209,12 +209,10 @@
 
 <!-- ======================= STAGE 2 ======================= -->
 <section id="click-alignment">
-  <div class="wrap">
+  <div class="wrap-wide">
     <p class="eyebrow">Stage 2 · Behavioral supervision</p>
     <h2 class="sec">Learning from clicks without learning position bias</h2>
-    <div class="prose">
-      <p class="lead">A click indicates appeal, but it also depends on what the user likely saw. We pair a clicked suggestion only with unclicked suggestions displayed above it.</p>
-    </div>
+    <p class="stage2-lead">A click indicates appeal, but it also depends on what the user likely saw. We pair a clicked suggestion only with unclicked suggestions displayed above it.</p>
 
     <div class="stage2-columns">
       <article class="stage2-panel click-preference-panel">
@@ -254,9 +252,12 @@
       </article>
     </div>
 
-    <div class="callout bad">
-      <h4>Clicks do not guarantee executability</h4>
-      <p>Stage 2 raises expert-rated quality and online CTR, yet visual inconsistency increases from 3.0% after SFT to 3.7%. Click feedback captures what looks appealing—not whether the edit is supported by the current image.</p>
+    <div class="callout bad stage2-warning">
+      <div class="warning-metric"><strong>3.0% → 3.7%</strong><span>visual inconsistency</span></div>
+      <div>
+        <h4>Clicks do not guarantee executability</h4>
+        <p>Stage 2 raises expert-rated quality and online CTR, but click feedback captures what looks appealing—not whether the edit is supported by the current image.</p>
+      </div>
     </div>
   </div>
 </section>
